@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     "allows-excel-lincoln-kings.trycloudflare.com",
     "localhost:3000",
   ],
+  serverExternalPackages: ["firebase-admin"],
 };
 
 export default nextConfig;
