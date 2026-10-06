@@ -2,7 +2,7 @@ const adminToken = "8850814054:AAG6mzh1XQRMKAnqokOgcFKwTqhDNPpk32w";
 const customerToken = "8998881678:AAF2dlHharlDMDdzFb8_y8leenq1gQ4xW2o";
 const adminChatId = "913924819";
 
-const tunnelBase = "https://allows-excel-lincoln-kings.trycloudflare.com";
+const tunnelBase = "https://teuk-spas.vercel.app";
 const appUrl = `${tunnelBase}/telegram`;
 const webhookUrl = `${tunnelBase}/api/telegram/webhook`;
 
