@@ -10,24 +10,26 @@ if (getApps().length === 0) {
   const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
   
     let parsedAccount;
-    try {
-      // Remove surrounding single quotes if they exist (common copy-paste issue)
-      let cleanAccount = serviceAccount.trim();
-      if (cleanAccount.startsWith("'") && cleanAccount.endsWith("'")) {
-        cleanAccount = cleanAccount.slice(1, -1);
+    if (serviceAccount) {
+      try {
+        // Remove surrounding single quotes if they exist (common copy-paste issue)
+        let cleanAccount = serviceAccount.trim();
+        if (cleanAccount.startsWith("'") && cleanAccount.endsWith("'")) {
+          cleanAccount = cleanAccount.slice(1, -1);
+        }
+        
+        // Handle escaped newlines that Vercel might inject
+        cleanAccount = cleanAccount.replace(/\\\\n/g, '\\n');
+        
+        parsedAccount = JSON.parse(cleanAccount);
+        
+        // Fix double-escaped newlines inside the private_key specifically
+        if (parsedAccount.private_key) {
+          parsedAccount.private_key = parsedAccount.private_key.replace(/\\n/g, '\n');
+        }
+      } catch (e) {
+        console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT", e);
       }
-      
-      // Handle escaped newlines that Vercel might inject
-      cleanAccount = cleanAccount.replace(/\\\\n/g, '\\n');
-      
-      parsedAccount = JSON.parse(cleanAccount);
-      
-      // Fix double-escaped newlines inside the private_key specifically
-      if (parsedAccount.private_key) {
-        parsedAccount.private_key = parsedAccount.private_key.replace(/\\n/g, '\n');
-      }
-    } catch (e) {
-      console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT", e);
     }
 
     if (parsedAccount) {
