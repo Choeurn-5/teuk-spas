@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { adminAuth } from "@/lib/firebase/admin";
+import { getAdminAuth } from "@/lib/firebase/admin";
 
 // Create session cookie
 export async function POST(request: Request) {
@@ -8,6 +8,7 @@ export async function POST(request: Request) {
 
     // Set session expiration to 5 days
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
+    const adminAuth = await getAdminAuth();
     const sessionCookie = await adminAuth.createSessionCookie(idToken, { expiresIn });
 
     const response = NextResponse.json({ success: true }, { status: 200 });

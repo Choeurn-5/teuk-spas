@@ -1,6 +1,6 @@
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { getAuth } from "firebase-admin/auth";
+import type { Auth } from "firebase-admin/auth";
 
 // Avoid re-initializing in hot-reloads
 let adminApp: App;
@@ -48,7 +48,16 @@ if (getApps().length === 0) {
 }
 
 const adminDb = getFirestore(adminApp);
-const adminAuth = getAuth(adminApp);
+
+// Lazy-load firebase-admin/auth to avoid ESM compatibility issues on Vercel
+let _adminAuth: Auth | null = null;
+async function getAdminAuth(): Promise<Auth> {
+  if (!_adminAuth) {
+    const { getAuth } = await import("firebase-admin/auth");
+    _adminAuth = getAuth(adminApp);
+  }
+  return _adminAuth;
+}
 
 // Setup emulator configuration for admin SDK
 // (Disabled so we can test against your live Firebase console data!)
@@ -60,4 +69,4 @@ if (process.env.NODE_ENV === "development") {
 }
 */
 
-export { adminApp, adminDb, adminAuth };
+export { adminApp, adminDb, getAdminAuth };
