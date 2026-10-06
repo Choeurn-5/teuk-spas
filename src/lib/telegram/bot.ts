@@ -137,7 +137,7 @@ export async function sendGuestBookingConfirmation(data: BookingAlertPayload): P
     formData.append("chat_id", String(data.telegramUser.id));
     formData.append(
       "document",
-      new Blob([pdfBuffer], { type: "application/pdf" }),
+      new Blob([pdfBuffer as any], { type: "application/pdf" }),
       `Teuk_Spa_Invoice_${data.reference}.pdf`
     );
     formData.append(
